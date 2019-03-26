@@ -28,15 +28,15 @@ require 'logger'
 #
 #   document_id   -- not available, leave as ''
 #
-#   path          -- give path from 0020/Data or 0020/Data/{WaltersManuscripts,OtherColllections}?
+#   path          -- 0020/Data/{WaltersManuscripts,OtherColllections}
 #
-#   title         -- extract from  metadata.xml '<dc:title>' (e.g., OtherCollections/PC1/data/metadata.xml)
+#   title         -- extract from metadata.xml '<dc:title>' (e.g., OtherCollections/PC1/data/metadata.xml)
 #
 #   metadata_type -- always 'Walters TEI'
 #
 #   created       -- directory mtime
 #
-#   updated        -- directory mtime
+#   updated       -- directory mtime
 #
 ################################################################################
 
