@@ -1,8 +1,8 @@
 # Create Walters Repository CSV
 
-Recreate the OPenn repository CSV format for Walters MSS and Other books. A
-separate file will be needed for each collection. The following is a sample
-of an OPenn repository CSV.
+Recreate the OPenn repository CSV format for repository 0020 folders
+WaltersManuscripts and OtherColllections.  The following is a sample of an
+OPenn repository CSV.
 
 From `0007_contents.csv`:
 
