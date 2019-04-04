@@ -3,6 +3,7 @@
 require 'digest'
 require 'tempfile'
 require 'fileutils'
+require 'logger'
 
 abort "OPENN_ROOT environment variable must be set"  unless ENV['OPENN_ROOT']
 OPENN_ROOT         = ENV['OPENN_ROOT']
