@@ -12,6 +12,10 @@ GLOBS              = %w{ *_tei.xml *.{rng,rnc,xsd,dtd,odd} }.freeze
 
 DEFAULT_BLOCK_SIZE = 1<<16
 
+CMD                 = File.basename __FILE__
+LOGGER              = Logger.new STDOUT
+LOGGER.level        = ENV['WALTERS_TEI_LOG_LEVEL'] || Logger::INFO
+
 descriptions = Dir["#{TEI_DIRECTORY}/*_tei.xml"]
 
 def manifest_data file
@@ -48,21 +52,28 @@ Dir.chdir TEI_DIRECTORY do
     changed = true
   end
   if changed
-    tmp_file = Tempfile.new
-    data.each do |file,checksum|
-      tmp_file.puts "#{checksum}  #{file}"
-    end
+    begin
+      tmp_file = Tempfile.new
+      data.each { |file,checksum| tmp_file.puts "#{checksum}  #{file}" }
+      tmp_file.flush
 
-    tmp_file.flush
-    if File.exist?(MANIFEST) && FileUtils.compare_file(tmp_file.path, MANIFEST)
-      puts "WARNING: Manifest unchanged"
-    else
-      FileUtils.cp tmp_file.path, MANIFEST
-      FileUtils.chmod 0644, MANIFEST
-      puts "INFO: Wrote new manifest: #{MANIFEST}"
+      if File.exist?(MANIFEST) && FileUtils.compare_file(tmp_file.path, MANIFEST)
+        LOGGER.warn(CMD) { "Files changed, but manifest unchanged: #{MANIFEST}" }
+      elsif File.exist? MANIFEST
+        FileUtils.cp tmp_file.path, MANIFEST
+        FileUtils.chmod 0644, MANIFEST
+        LOGGER.info(CMD) { "Updated manifest: #{MANIFEST}" }
+      else
+        FileUtils.cp tmp_file.path, MANIFEST
+        FileUtils.chmod 0644, MANIFEST
+        LOGGER.info(CMD) { "Wrote new manifest: #{MANIFEST}" }
+      end
+    ensure
+      if File.exist? tmp_file
+        tmp_file.close
+        tmp_file.unlink
+      end
     end
-    tmp_file.close
-    tmp_file.unlink
   else
     puts "INFO: No changes made to #{MANIFEST}"
   end
