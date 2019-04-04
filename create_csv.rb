@@ -43,6 +43,7 @@ require 'logger'
 ################################################################################
 # CONSTANTS
 ################################################################################
+abort "OPENN_ROOT environment variable must be set"  unless ENV['OPENN_ROOT']
 OPENN_ROOT          = ENV['OPENN_ROOT']
 BASEDIR             = "#{OPENN_ROOT}/Data/".freeze
 CSV_DESTINATION     = File.join BASEDIR, '0020_contents.csv'
